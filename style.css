@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+
+:root{
+    --padding: 20px;
+    --border-radius: 5px;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+}
+
+h1, h2, label{
+    font-family: 'Courgette', cursive;
+}
+
+header{
+    height: 80px;
+    background-color: #9A6D38;
+    padding: var(--padding);
+    display: flex;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+header .logo{
+    height: 80px;
+    margin-right: var(--padding);
+}
+
+
+#bookshelf{
+    padding: 40px;
+    gap: var(--padding);
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 240px);
+    grid-template-rows: repeat;
+}
+
+#bookshelf > *{
+    height: 250px;
+    background-color: #9A6D38;
+}
+
+#bookshelf-addbook{
+    
+}
+
+
+
+
+
+
+
+
+/* Hidden */
+
+.hide{
+    display: none;
+}
+
+#grey-background{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #cccccc55  ;
+    backdrop-filter: blur(2px);
+}
+
+#form-wrapper{
+    background-color: #9A6D38;
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    height: 400px;
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#newbook-form{
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--padding);
+}
+
+#newbook-form *{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form h2, form input:not([type='checkbox']), form button{
+    text-align: center;
+    grid-column: 1 / 3;
+}
+
+input, button{
+    height: 35px;
+    border: none;
+    border-radius: var(--border-radius);
+}
+
+::placeholder{
+    text-align: center;
+}

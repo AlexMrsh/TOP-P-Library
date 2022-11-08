@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <title>Project: Library</title>
+</head>
+<body>
+    <header>
+        <img src="icons/icons8-book-shelf-96.png" alt="library logo" class="logo">
+        <h1>Library</h1>
+    </header>
+
+    <div id="bookshelf">
+        <div id="bookshelf-addbook">content</div>
+        <div class="book"></div>
+    </div>
+
+
+    <div id="grey-background" class="hide">
+    </div>
+    
+    <div id="form-wrapper" class="hide">
+        <form action="/" id="newbook-form">
+            <h2>Add new book</h2>
+            <input type="text" name="title" id="book-title" placeholder="Book title">
+            <input type="text" name="author" id="book-author" placeholder="Book author">
+            <input type="number" min="1" name="pages" id="book-pages" placeholder="Pages">
+            <label for="book-read">Read ?</label>
+            <input type="checkbox" name="read" id="book-read">
+            <button>Submit</button>
+        </form>
+    </div>
+
+</body>
+</html>
