@@ -15,23 +15,31 @@
     </header>
 
     <div id="bookshelf">
-        <div id="bookshelf-addbook">content</div>
-        <div class="book"></div>
+        <div id="add-book-button"><span>+</span></div>
+        <div class="book">
+            <div class="book-cover">
+                <img src="https://picsum.photos/100/150" alt="book cover">
+            </div>
+            <span class="book-title">Title</span>
+            <span class="book-author">Author</span>
+            <div class="page-count">
+                <span class="page-read">8</span> / <span class="page-total">10</span>
+            </div>
+        </div>
     </div>
 
 
-    <div id="grey-background" class="hide">
+    <div id="add-book-container" class="hidden">
     </div>
-    
-    <div id="form-wrapper" class="hide">
+    <div id="form-wrapper" class="hidden">
         <form action="/" id="newbook-form">
             <h2>Add new book</h2>
-            <input type="text" name="title" id="book-title" placeholder="Book title">
-            <input type="text" name="author" id="book-author" placeholder="Book author">
-            <input type="number" min="1" name="pages" id="book-pages" placeholder="Pages">
-            <label for="book-read">Read ?</label>
-            <input type="checkbox" name="read" id="book-read">
-            <button>Submit</button>
+            <input type="text" name="title" id="newbook-title" placeholder="Book title">
+            <input type="text" name="author" id="newbook-author" placeholder="Book author">
+            <input type="number" min="1" name="pages" id="newbook-pages" placeholder="Pages">
+            <label for="newbook-read">Read ?</label>
+            <input type="checkbox" name="read" id="newbook-read">
+            <button id="newbook-submit">Submit</button>
         </form>
     </div>
 
