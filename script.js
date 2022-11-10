@@ -1,34 +1,6 @@
 const addBookPlus = document.getElementById('add-book-button');
 const addBookContainer = document.getElementById('add-book-container')
 const formWrapper = document.getElementById('form-wrapper')
-
-const toggleNewbookForm = function(){
-    addBookContainer.classList.toggle('hidden')
-    formWrapper.classList.toggle('hidden')
-}
-
-addBookPlus.addEventListener('click', () =>{
-    toggleNewbookForm();
-})
-
-addBookContainer.addEventListener('click', () =>{
-    toggleNewbookForm();
-})
-
-let myLibrary = [{}];
-
-function Book(title, author, pages, read){
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-}
-
-function addBookToLibrary(title, author, pages, read){
-    myLibrary.push({title, author, pages, read})
-    console.log(myLibrary)
-}
-
 const newbookTitle = document.getElementById('newbook-title')
 const newbookAuthor = document.getElementById('newbook-author')
 const newbookPages = document.getElementById('newbook-pages')
@@ -36,10 +8,55 @@ const newbookRead = document.getElementById('newbook-read')
 const newbookSubmit = document.getElementById('newbook-submit');
 
 
+
+function toggleHiddenClass(){
+    addBookContainer.classList.toggle('hidden')
+    formWrapper.classList.toggle('hidden')
+    resetForm();
+}
+
+function resetForm(){
+    newbookTitle.value = "";
+    newbookAuthor.value = "";
+    newbookPages.value = "";
+    newbookRead.checked = false;
+    document.querySelectorAll('#newbook-form > input').forEach((element) => element.classList.remove('form-ok'));
+    document.querySelectorAll('#newbook-form > input').forEach((element) => element.classList.remove('form-error'));
+}
+
+addBookPlus.addEventListener('click', () =>{
+    toggleHiddenClass();
+})
+
+addBookContainer.addEventListener('click', () =>{
+    toggleHiddenClass();
+})
+
+
+let myLibrary = [];
+
+//Book object constructor
+function Book(title, author, pages, read){
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+}
+
+//Create new book function
+function addBookToLibrary(title, author, pages, read){
+    let newBook = new Book(title, author, pages, read);
+    myLibrary.push(newBook);
+    console.log(myLibrary);
+}
+
+
+
+
 // on en est ici !
 
 
-const checkValidity = function(element){
+function checkValidity(element){
     if (!element.value){
         element.classList.remove ('form-ok')
         element.classList.add('form-error')
@@ -51,24 +68,17 @@ const checkValidity = function(element){
     }
 }
 
+
 newbookSubmit.addEventListener('click', (e) => {
     e.preventDefault();
-    checkValidity(newbookTitle);
-    checkValidity(newbookAuthor);
-    checkValidity(newbookPages);
-    
-    checkValidity()
-    if(!newbookTitle.value || !newbookAuthor.value || !newbookPages.value){
-        (!newbookTitle.value) ? formError(newbookTitle);
-        if (!newbookAuthor.value) formError(newbookAuthor);
-        if (!newbookPages.value) formError(newbookPages);
-        return;
-    }
-    
-    addBookToLibrary(newbookTitle, newbookAuthor, newbookPages, newbookRead);
-    toggleNewbookForm();
-    
+    let x = checkValidity(newbookTitle);
+    let y = checkValidity(newbookAuthor);
+    let z = checkValidity(newbookPages);
+    if(!x || !y || !z) return;
+    addBookToLibrary(newbookTitle.value, newbookAuthor.value, newbookPages.value, newbookRead.checked);
+    toggleHiddenClass();
 })
+
 
 
 //loop through myLibrary and display in cards
