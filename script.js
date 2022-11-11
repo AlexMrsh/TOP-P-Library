@@ -1,11 +1,15 @@
 const addBookPlus = document.getElementById('add-book-button');
-const addBookContainer = document.getElementById('add-book-container')
-const formWrapper = document.getElementById('form-wrapper')
+const newbookContainer = document.getElementById('newbook-container')
+const newbookFormWrapper = document.getElementById('newbook-form-wrapper')
 const newbookTitle = document.getElementById('newbook-title')
 const newbookAuthor = document.getElementById('newbook-author')
 const newbookPages = document.getElementById('newbook-pages')
 const newbookRead = document.getElementById('newbook-read')
 const newbookSubmit = document.getElementById('newbook-submit');
+
+const editbookContainer = document.getElementById('editbook-container')
+const editbookFormWrapper = document.getElementById('editbook-form-wrapper')
+
 const bookshelf = document.getElementById('bookshelf');
 const books = document.querySelectorAll('.book');   //inutile pour l'instant
 
@@ -33,10 +37,16 @@ function loadExistingBooks(){
 loadExistingBooks();
 
 //show or hide newbook form
-function toggleHiddenClass(){
-    addBookContainer.classList.toggle('hidden')
-    formWrapper.classList.toggle('hidden')
+function toggleHiddenAddbook(){
+    newbookContainer.classList.toggle('hidden')
+    newbookFormWrapper.classList.toggle('hidden')
     resetForm();
+}
+
+//show or hide editbook form
+function toggleHiddenEditbook(){
+    editbookContainer.classList.toggle('hidden')
+    editbookFormWrapper.classList.toggle('hidden')
 }
 
 //reset form when closed
@@ -51,10 +61,13 @@ function resetForm(){
 
 //listen for form open or close
 addBookPlus.addEventListener('click', () =>{
-    toggleHiddenClass();
+    toggleHiddenAddbook();
 })
-addBookContainer.addEventListener('click', () =>{
-    toggleHiddenClass();
+newbookContainer.addEventListener('click', () =>{
+    toggleHiddenAddbook();
+})
+editbookContainer.addEventListener('click', () =>{
+    toggleHiddenEditbook();
 })
 
 //listen for form submit
@@ -66,7 +79,7 @@ newbookSubmit.addEventListener('click', (e) => {
     if(!x || !y || !z) return;
     addBookToLibrary(newbookTitle.value, newbookAuthor.value, newbookPages.value, newbookRead.checked);
     addBookToBookshelf(myLibrary[myLibrary.length-1])
-    toggleHiddenClass();
+    toggleHiddenAddbook();
 })
 
 //check form validity
@@ -124,27 +137,21 @@ function addBookToBookshelf(object){
     bookButtonsDiv = document.createElement('div')
     bookButtonsDiv.className = 'book-buttons'
 
-    bookButtonRead = document.createElement('button');
+    bookButtonRead = document.createElement('input');
+    bookButtonRead.type = 'checkbox'
+    bookButtonRead.checked = object.read
     bookButtonRead.className = 'button-read'
     bookButtonRead.textContent = 'Read'
 
     bookButtonEdit = document.createElement('button')
     bookButtonEdit.className = 'button-edit'
     bookButtonEdit.textContent = 'Edit'
-
-    bookButtonDelete = document.createElement('button')
-    bookButtonDelete.className = 'button-delete'
-    bookButtonDelete.textContent = 'Delete'
     
-
-    //test
-
-
-
-
-    //listen for click
+    //listen for click on bookDiv
     bookDiv.addEventListener('click', openBook);
-    
+    bookButtonRead.addEventListener('click', markAsRead)
+    bookButtonEdit.addEventListener('click', editBook)
+
     bookshelf.appendChild(bookDiv);
     bookDiv.appendChild(bookCoverDiv);
     bookCoverDiv.appendChild(bookCoverImg);
@@ -157,7 +164,6 @@ function addBookToBookshelf(object){
     bookDiv.appendChild(bookButtonsDiv)
     bookButtonsDiv.appendChild(bookButtonRead)
     bookButtonsDiv.appendChild(bookButtonEdit)
-    bookButtonsDiv.appendChild(bookButtonDelete)
 
 }
 
@@ -165,8 +171,21 @@ function addBookToBookshelf(object){
 function openBook(element){
     element.stopPropagation();
     console.log(element.target);
-    element.target.remove();
+    // element.target.remove();
 }
+
+//mark book as read
+function markAsRead(element){
+    element.stopPropagation();
+    console.log('read')
+}
+
+function editBook(element){
+    element.stopPropagation();
+    toggleHiddenEditbook();
+    console.log('edit')
+}
+
 
 
 

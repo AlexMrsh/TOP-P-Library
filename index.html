@@ -26,18 +26,30 @@
                 <span class="page-read">8</span> / <span class="page-total">10</span>
             </div>
             <div class="book-buttons">
-                <button class="button-read">Read</button>
+                <input type="checkbox" class="button-read">
                 <button class="button-edit">Edit</button>
-                <button class="button-delete">Delete</button>
             </div>
         </div>
     </div>
 
 
-    <div id="add-book-container" class="hidden"></div>
-    <div id="form-wrapper" class="hidden">
+    <div id="newbook-container" class="hidden"></div>
+    <div id="newbook-form-wrapper" class="hidden">
         <form action="/" id="newbook-form">
             <h2>Add new book</h2>
+            <input type="text" name="title" id="newbook-title" placeholder="Book title">
+            <input type="text" name="author" id="newbook-author" placeholder="Book author">
+            <input type="number" min="1" name="pages" id="newbook-pages" placeholder="Pages">
+            <label for="newbook-read">Read ?</label>
+            <input type="checkbox" name="read" id="newbook-read">
+            <button id="newbook-submit">Submit</button>
+        </form>
+    </div>
+
+    <div id="editbook-container" class="hidden"></div>
+    <div id="editbook-form-wrapper" class="hidden">
+        <form action="/" id="newbook-form">
+            <h2>Edit book</h2>
             <input type="text" name="title" id="newbook-title" placeholder="Book title">
             <input type="text" name="author" id="newbook-author" placeholder="Book author">
             <input type="number" min="1" name="pages" id="newbook-pages" placeholder="Pages">

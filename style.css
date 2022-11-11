@@ -77,13 +77,12 @@ header .logo{
 .book-buttons{
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .book-buttons > *{
     width: 60px;
 }
-
 
 
 
@@ -95,7 +94,8 @@ header .logo{
     display: none;
 }
 
-#add-book-container{
+#newbook-container,
+#editbook-container{
     position: absolute;
     left: 0;
     top: 0;
@@ -105,7 +105,8 @@ header .logo{
     backdrop-filter: blur(2px);
 }
 
-#form-wrapper{
+#newbook-form-wrapper,
+#editbook-form-wrapper{
     background-color: #9A6D38;
     padding: var(--padding);
     border-radius: var(--border-radius);
