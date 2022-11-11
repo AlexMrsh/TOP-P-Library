@@ -100,28 +100,50 @@ function addBookToBookshelf(object){
     bookCoverImg = document.createElement('img')
     bookCoverImg.src = 'https://picsum.photos/100/150';
     bookCoverImg.alt = 'book cover';
-
+    
     bookTitleSpan = document.createElement('span');
     bookTitleSpan.className = 'book-title';
+    bookTitleSpan.textContent = object.title
 
     bookAuthorSpan = document.createElement('span');
     bookAuthorSpan.className = 'book-author';
+    bookAuthorSpan.textContent = object.author
 
     bookPageCountDiv = document.createElement('div');
     bookPageCountDiv.className = 'page-count';
 
     bookPageReadSpan = document.createElement('span')
     bookPageReadSpan.className = 'page-read'
+    bookPageReadSpan.textContent = object.pages    //modify later
     
     bookPageTotalSpan = document.createElement('span')
     bookPageTotalSpan.className = 'page-total'
-
-    bookTitleSpan.textContent = object.title
-    bookAuthorSpan.textContent = object.author
-    bookPageReadSpan.textContent = object.pages    //modify later
     bookPageTotalSpan.textContent = object.pages   //modify later
 
+    // test
+    bookButtonsDiv = document.createElement('div')
+    bookButtonsDiv.className = 'book-buttons'
+
+    bookButtonRead = document.createElement('button');
+    bookButtonRead.className = 'button-read'
+    bookButtonRead.textContent = 'Read'
+
+    bookButtonEdit = document.createElement('button')
+    bookButtonEdit.className = 'button-edit'
+    bookButtonEdit.textContent = 'Edit'
+
+    bookButtonDelete = document.createElement('button')
+    bookButtonDelete.className = 'button-delete'
+    bookButtonDelete.textContent = 'Delete'
+    
+
+    //test
+
+
+
+
     //listen for click
+    bookDiv.addEventListener('click', openBook);
     
     bookshelf.appendChild(bookDiv);
     bookDiv.appendChild(bookCoverDiv);
@@ -132,11 +154,16 @@ function addBookToBookshelf(object){
     bookPageCountDiv.appendChild(bookPageReadSpan)
     bookPageCountDiv.insertAdjacentText('beforeend', ' / ');
     bookPageCountDiv.appendChild(bookPageTotalSpan)
-    bookDiv.addEventListener('click', openBook);
+    bookDiv.appendChild(bookButtonsDiv)
+    bookButtonsDiv.appendChild(bookButtonRead)
+    bookButtonsDiv.appendChild(bookButtonEdit)
+    bookButtonsDiv.appendChild(bookButtonDelete)
+
 }
 
 //open book element content
 function openBook(element){
+    element.stopPropagation();
     console.log(element.target);
     element.target.remove();
 }
