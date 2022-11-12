@@ -2,9 +2,9 @@ const addBookPlus = document.getElementById('add-book-button');
 
 const bookFormContainer = document.getElementById('book-form-container')
 const bookFormWrapper = document.getElementById('book-form-wrapper')
-const bookFormInputs = document.querySelectorAll('#book-form > input')
+const bookFormInputs = document.querySelectorAll('#book-form input')
 const bookFormH2 = document.getElementById('book-form-h2')
-const bookFormIsbn = document.getElementById('book-form-isbn')
+const bookFormISBN = document.getElementById('book-form-isbn')
 const bookFormTitle = document.getElementById('book-form-title')
 const bookFormAuthor = document.getElementById('book-form-author')
 const bookFormPagesRead = document.getElementById('book-form-pages-read')
@@ -15,6 +15,15 @@ const bookFormSubmit = document.getElementById('book-form-submit');
 const bookshelf = document.getElementById('bookshelf');
 const books = document.querySelectorAll('.book');   //inutile pour l'instant
 
+//correct input values if pagesTotal > pagesRead
+bookFormPagesTotal.addEventListener('change', () =>{
+    bookFormPagesRead.setAttribute('max', bookFormPagesTotal.value)
+    if(bookFormPagesRead.value > bookFormPagesTotal.value){
+        bookFormPagesRead.value = bookFormPagesTotal.value
+    }
+})
+
+
 let myLibrary = [];
 
 let arrayRef = 0;
@@ -24,15 +33,17 @@ goal is to use data-arrayref value to fill the form wih the array values when mo
 */
 
 //temp values for test
-addBookToLibrary('one', 'two', 3, true);
-addBookToLibrary('five', 'six', 7, false);
-addBookToLibrary('nine', 'ten', 11, true)
+addBookToLibrary(123, 'one', 'two', 3, 6, true);
+addBookToLibrary(456, 'five', 'six', 7, 10, false);
+addBookToLibrary(789, 'nine', 'ten', 11, 13, true)
 
 //Book object constructor
-function Book(title, author, pages, read){
+function Book(ISBN, title, author, pagesRead, pagesTotal, read){
+    this.ISBN = ISBN;
     this.title = title;
     this.author = author;
-    this.pages = pages;
+    this.pagesRead = pagesRead;
+    this.pagesTotal = pagesTotal;
     this.read = read;
 }
 
@@ -54,7 +65,7 @@ function toggleHiddenBookForm(){
 
 //reset form
 function resetForm(){
-    bookFormIsbn.value = ""
+    bookFormISBN.value = ""
     bookFormTitle.value = "";
     bookFormAuthor.value = "";
     bookFormPagesRead.value = "";
@@ -90,9 +101,10 @@ function openBook(event){
     // element.target.remove();
 }
 
-function addExistingBookValues(bookArrayRef){
-    console.log(bookArrayRef)
-    console.log(myLibrary[bookArrayRef].title)
+function addExistingBookValues(bookArrayRef){                       // qe kuyeg iug ierug tlieugrs tglhbctg;jbhfghbcgi;kbcv
+    let bookObject = myLibrary[bookArrayRef]
+    bookFormTitle.value = bookObject.title;
+    bookFormAuthor.value = bookObject.author
 }
 
 
@@ -107,13 +119,19 @@ bookFormContainer.addEventListener('click', () =>{
 //listen for form submit
 bookFormSubmit.addEventListener('click', (e) => {
     e.preventDefault();
-    let w = checkValidity(bookFormTitle);
-    let x = checkValidity(bookFormAuthor);
-    let y = checkValidity(bookFormPagesRead);
+    let w = checkValidity(bookFormTitle)
+    let x = checkValidity(bookFormAuthor)
+    let y = checkValidity(bookFormPagesRead)
     let z = checkValidity(bookFormPagesTotal)
-    if(!w || !x || !y || !z) return;
-    addBookToLibrary(bookFormTitle.value, bookFormAuthor.value, bookFormPagesRead.value, bookFormRead.checked);
+    let pages = checkIfRead(bookFormPagesRead, bookFormPagesTotal)
+    if(!w || !x || !y || !z || !pages) return;
+/*     if(bookFormPagesRead === bookFormPagesTotal){
+        bookFormRead.checked = true;
+        bookFormRead.setAttribute('readonly', 'true')
+    } */
+    addBookToLibrary(bookFormISBN.value, bookFormTitle.value, bookFormAuthor.value, bookFormPagesRead.value, bookFormPagesTotal.value, bookFormRead.checked);
     addBookToBookshelf(myLibrary[myLibrary.length-1])
+    console.log(myLibrary)
     toggleHiddenBookForm();
 })
 
@@ -130,9 +148,25 @@ function checkValidity(element){
     }
 }
 
+//check if pagesTotal < pagesRead
+function checkIfRead(pagesRead, pagesTotal){
+    if(pagesRead.value > pagesTotal.value){
+        pagesRead.classList.remove('form-ok')
+        pagesRead.classList.add('form-error')
+        pagesTotal.classList.remove('form-ok')
+        pagesTotal.classList.add('form-error')
+        return false;
+    }else{
+        pagesRead.classList.add('form-ok')
+        pagesRead.classList.remove('form-error')
+        pagesTotal.classList.add('form-ok')
+        pagesTotal.classList.remove('form-error')
+    }
+}
+
 //Add form input to myLibrary array
-function addBookToLibrary(title, author, pages, read){
-    let newBook = new Book(title, author, pages, read);
+function addBookToLibrary(ISBN, title, author, pagesRead, pagesTotal, read){
+    let newBook = new Book(ISBN, title, author, pagesRead, pagesTotal, read);
     myLibrary.push(newBook);
 }
 
@@ -150,7 +184,7 @@ function addBookToBookshelf(object){
     bookCoverDiv.className = 'book-cover';
 
     bookCoverImg = document.createElement('img')
-    bookCoverImg.src = 'https://picsum.photos/100/150';  //modify later
+    bookCoverImg.src = 'https://picsum.photos/100/150';  //modify later with google books API
     bookCoverImg.alt = 'book cover';
     
     bookTitleSpan = document.createElement('span');
@@ -166,11 +200,11 @@ function addBookToBookshelf(object){
 
     bookPageReadSpan = document.createElement('span')
     bookPageReadSpan.className = 'page-read'
-    bookPageReadSpan.textContent = object.pages    //modify later
+    bookPageReadSpan.textContent = object.pagesRead    //modify later
     
     bookPageTotalSpan = document.createElement('span')
     bookPageTotalSpan.className = 'page-total'
-    bookPageTotalSpan.textContent = object.pages   //modify later
+    bookPageTotalSpan.textContent = object.pagesTotal   //modify later
     
     //listen for click on bookDiv
     bookDiv.addEventListener('click', openBook);
