@@ -1,23 +1,32 @@
 const addBookPlus = document.getElementById('add-book-button');
-const newbookContainer = document.getElementById('newbook-container')
-const newbookFormWrapper = document.getElementById('newbook-form-wrapper')
-const newbookTitle = document.getElementById('newbook-title')
-const newbookAuthor = document.getElementById('newbook-author')
-const newbookPages = document.getElementById('newbook-pages')
-const newbookRead = document.getElementById('newbook-read')
-const newbookSubmit = document.getElementById('newbook-submit');
 
-const editbookContainer = document.getElementById('editbook-container')
-const editbookFormWrapper = document.getElementById('editbook-form-wrapper')
+const bookFormContainer = document.getElementById('book-form-container')
+const bookFormWrapper = document.getElementById('book-form-wrapper')
+const bookFormInputs = document.querySelectorAll('#book-form > input')
+const bookFormH2 = document.getElementById('book-form-h2')
+const bookFormIsbn = document.getElementById('book-form-isbn')
+const bookFormTitle = document.getElementById('book-form-title')
+const bookFormAuthor = document.getElementById('book-form-author')
+const bookFormPagesRead = document.getElementById('book-form-pages-read')
+const bookFormPagesTotal = document.getElementById('book-form-pages-total')
+const bookFormRead = document.getElementById('book-form-read')
+const bookFormSubmit = document.getElementById('book-form-submit');
 
 const bookshelf = document.getElementById('bookshelf');
 const books = document.querySelectorAll('.book');   //inutile pour l'instant
 
 let myLibrary = [];
 
+let arrayRef = 0;
+/*
+used to set a data-arrayref to the div.book
+goal is to use data-arrayref value to fill the form wih the array values when modifying existing books
+*/
+
 //temp values for test
 addBookToLibrary('one', 'two', 3, true);
 addBookToLibrary('five', 'six', 7, false);
+addBookToLibrary('nine', 'ten', 11, true)
 
 //Book object constructor
 function Book(title, author, pages, read){
@@ -36,50 +45,76 @@ function loadExistingBooks(){
 
 loadExistingBooks();
 
-//show or hide newbook form
-function toggleHiddenAddbook(){
-    newbookContainer.classList.toggle('hidden')
-    newbookFormWrapper.classList.toggle('hidden')
-    resetForm();
+//show or hide book form
+function toggleHiddenBookForm(){
+    resetForm()
+    bookFormContainer.classList.toggle('hidden')
+    bookFormWrapper.classList.toggle('hidden')
 }
 
-//show or hide editbook form
-function toggleHiddenEditbook(){
-    editbookContainer.classList.toggle('hidden')
-    editbookFormWrapper.classList.toggle('hidden')
-}
-
-//reset form when closed
+//reset form
 function resetForm(){
-    newbookTitle.value = "";
-    newbookAuthor.value = "";
-    newbookPages.value = "";
-    newbookRead.checked = false;
-    document.querySelectorAll('#newbook-form > input').forEach((element) => element.classList.remove('form-ok'));
-    document.querySelectorAll('#newbook-form > input').forEach((element) => element.classList.remove('form-error'));
+    bookFormIsbn.value = ""
+    bookFormTitle.value = "";
+    bookFormAuthor.value = "";
+    bookFormPagesRead.value = "";
+    bookFormPagesTotal.value = ""
+    bookFormRead.checked = false;
+    document.querySelectorAll('#book-form > input').forEach((element) => element.classList.remove('form-ok'));
+    document.querySelectorAll('#book-form > input').forEach((element) => element.classList.remove('form-error'));
 }
 
-//listen for form open or close
+//click on add book button
 addBookPlus.addEventListener('click', () =>{
-    toggleHiddenAddbook();
+    bookFormH2.textContent = 'Add book'
+    toggleHiddenBookForm();
+    bookFormInputs.forEach(input => {
+        input.removeAttribute('readonly')
+    })
 })
-newbookContainer.addEventListener('click', () =>{
-    toggleHiddenAddbook();
-})
-editbookContainer.addEventListener('click', () =>{
-    toggleHiddenEditbook();
+
+
+
+
+
+//click on individual book element
+function openBook(event){
+    bookFormH2.textContent = 'Edit book'
+    toggleHiddenBookForm();
+
+    let bookArrayRef = event.target.closest('.book').getAttribute('data-arrayref')    
+    addExistingBookValues(bookArrayRef)
+    bookFormInputs.forEach(input => {
+        input.setAttribute('readonly', 'true')
+    })
+    // element.target.remove();
+}
+
+function addExistingBookValues(bookArrayRef){
+    console.log(bookArrayRef)
+    console.log(myLibrary[bookArrayRef].title)
+}
+
+
+
+
+
+//click on form container (background)
+bookFormContainer.addEventListener('click', () =>{
+    toggleHiddenBookForm();
 })
 
 //listen for form submit
-newbookSubmit.addEventListener('click', (e) => {
+bookFormSubmit.addEventListener('click', (e) => {
     e.preventDefault();
-    let x = checkValidity(newbookTitle);
-    let y = checkValidity(newbookAuthor);
-    let z = checkValidity(newbookPages);
-    if(!x || !y || !z) return;
-    addBookToLibrary(newbookTitle.value, newbookAuthor.value, newbookPages.value, newbookRead.checked);
+    let w = checkValidity(bookFormTitle);
+    let x = checkValidity(bookFormAuthor);
+    let y = checkValidity(bookFormPagesRead);
+    let z = checkValidity(bookFormPagesTotal)
+    if(!w || !x || !y || !z) return;
+    addBookToLibrary(bookFormTitle.value, bookFormAuthor.value, bookFormPagesRead.value, bookFormRead.checked);
     addBookToBookshelf(myLibrary[myLibrary.length-1])
-    toggleHiddenAddbook();
+    toggleHiddenBookForm();
 })
 
 //check form validity
@@ -101,17 +136,21 @@ function addBookToLibrary(title, author, pages, read){
     myLibrary.push(newBook);
 }
 
+
 //create book grid element and add values of the last array object
 function addBookToBookshelf(object){
     console.log(object)
     bookDiv = document.createElement('div');
     bookDiv.className = 'book';
 
+    bookDiv.setAttribute('data-arrayref', arrayRef)
+    arrayRef++;
+
     bookCoverDiv = document.createElement('div')
     bookCoverDiv.className = 'book-cover';
 
     bookCoverImg = document.createElement('img')
-    bookCoverImg.src = 'https://picsum.photos/100/150';
+    bookCoverImg.src = 'https://picsum.photos/100/150';  //modify later
     bookCoverImg.alt = 'book cover';
     
     bookTitleSpan = document.createElement('span');
@@ -132,25 +171,9 @@ function addBookToBookshelf(object){
     bookPageTotalSpan = document.createElement('span')
     bookPageTotalSpan.className = 'page-total'
     bookPageTotalSpan.textContent = object.pages   //modify later
-
-    // test
-    bookButtonsDiv = document.createElement('div')
-    bookButtonsDiv.className = 'book-buttons'
-
-    bookButtonRead = document.createElement('input');
-    bookButtonRead.type = 'checkbox'
-    bookButtonRead.checked = object.read
-    bookButtonRead.className = 'button-read'
-    bookButtonRead.textContent = 'Read'
-
-    bookButtonEdit = document.createElement('button')
-    bookButtonEdit.className = 'button-edit'
-    bookButtonEdit.textContent = 'Edit'
     
     //listen for click on bookDiv
     bookDiv.addEventListener('click', openBook);
-    bookButtonRead.addEventListener('click', markAsRead)
-    bookButtonEdit.addEventListener('click', editBook)
 
     bookshelf.appendChild(bookDiv);
     bookDiv.appendChild(bookCoverDiv);
@@ -161,30 +184,9 @@ function addBookToBookshelf(object){
     bookPageCountDiv.appendChild(bookPageReadSpan)
     bookPageCountDiv.insertAdjacentText('beforeend', ' / ');
     bookPageCountDiv.appendChild(bookPageTotalSpan)
-    bookDiv.appendChild(bookButtonsDiv)
-    bookButtonsDiv.appendChild(bookButtonRead)
-    bookButtonsDiv.appendChild(bookButtonEdit)
-
 }
 
-//open book element content
-function openBook(element){
-    element.stopPropagation();
-    console.log(element.target);
-    // element.target.remove();
-}
 
-//mark book as read
-function markAsRead(element){
-    element.stopPropagation();
-    console.log('read')
-}
-
-function editBook(element){
-    element.stopPropagation();
-    toggleHiddenEditbook();
-    console.log('edit')
-}
 
 
 

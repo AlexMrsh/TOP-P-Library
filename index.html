@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <title>Project: Library</title>
@@ -25,37 +26,23 @@
             <div class="page-count">
                 <span class="page-read">8</span> / <span class="page-total">10</span>
             </div>
-            <div class="book-buttons">
-                <input type="checkbox" class="button-read">
-                <button class="button-edit">Edit</button>
-            </div>
         </div>
     </div>
 
 
-    <div id="newbook-container" class="hidden"></div>
-    <div id="newbook-form-wrapper" class="hidden">
-        <form action="/" id="newbook-form">
-            <h2>Add new book</h2>
-            <input type="text" name="title" id="newbook-title" placeholder="Book title">
-            <input type="text" name="author" id="newbook-author" placeholder="Book author">
-            <input type="number" min="1" name="pages" id="newbook-pages" placeholder="Pages">
-            <label for="newbook-read">Read ?</label>
-            <input type="checkbox" name="read" id="newbook-read">
-            <button id="newbook-submit">Submit</button>
-        </form>
-    </div>
-
-    <div id="editbook-container" class="hidden"></div>
-    <div id="editbook-form-wrapper" class="hidden">
-        <form action="/" id="newbook-form">
-            <h2>Edit book</h2>
-            <input type="text" name="title" id="newbook-title" placeholder="Book title">
-            <input type="text" name="author" id="newbook-author" placeholder="Book author">
-            <input type="number" min="1" name="pages" id="newbook-pages" placeholder="Pages">
-            <label for="newbook-read">Read ?</label>
-            <input type="checkbox" name="read" id="newbook-read">
-            <button id="newbook-submit">Submit</button>
+    <div id="book-form-container" class="hidden"></div>
+    <div id="book-form-wrapper" class="hidden">
+        <form action="/" id="book-form">
+            <h2 id="book-form-h2"></h2>
+            <span id="book-form-edit" class="material-symbols-outlined">edit_square</span>
+            <img src="https://picsum.photos/100/150" alt="book-cover" id="book-form-cover">
+            <input type="text" name="isbn" id="book-form-isbn" placeholder="ISBN">        <!--later use for google books API-->
+            <input type="text" name="title" id="book-form-title" placeholder="Book title">
+            <input type="text" name="author" id="book-form-author" placeholder="Book author">
+            <input type="number" min="1" name="pages" class="grid-one-third" id="book-form-pages-read" placeholder="Pages read">
+            <input type="number" min="1" name="pages" class="grid-one-third" id="book-form-pages-total" placeholder="Pages total">
+            <input type="checkbox" name="read" class="grid-one-third" id="book-form-read">
+            <button id="book-form-submit">Submit</button>
         </form>
     </div>
 
