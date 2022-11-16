@@ -2,6 +2,8 @@ const addBookPlus = document.getElementById('add-book-button');
 
 const bookFormContainer = document.getElementById('book-form-container')
 const bookFormWrapper = document.getElementById('book-form-wrapper')
+const bookFormEdit = document.getElementById('book-form-edit')
+const bookFormDelete = document.getElementById('book-form-delete')
 const bookFormInputs = document.querySelectorAll('#book-form input')
 const bookFormH2 = document.getElementById('book-form-h2')
 const bookFormISBN = document.getElementById('book-form-isbn')
@@ -11,22 +13,33 @@ const bookFormPagesRead = document.getElementById('book-form-pages-read')
 const bookFormPagesTotal = document.getElementById('book-form-pages-total')
 const bookFormRead = document.getElementById('book-form-read')
 const bookFormSubmit = document.getElementById('book-form-submit');
-
 const bookshelf = document.getElementById('bookshelf');
-const books = document.querySelectorAll('.book');   //inutile pour l'instant
 
-//correct input values if pagesTotal > pagesRead
+let myLibrary = [];
+let arrayRef = 0;
+let modify = false;
+let bookObject;
+
+//Check if pagesTotal > pagesRead
 bookFormPagesTotal.addEventListener('change', () =>{
     bookFormPagesRead.setAttribute('max', bookFormPagesTotal.value)
     if(bookFormPagesRead.value > bookFormPagesTotal.value){
         bookFormPagesRead.value = bookFormPagesTotal.value
     }
+    return;
 })
 
+//Click on "Modify book"
+bookFormEdit.addEventListener('click', () =>{
+    modify = true;
+    bookFormInputs.forEach(input => {input.removeAttribute('readonly')})
+    bookFormSubmit.classList.remove('hidden')
+})
 
-let myLibrary = [];
+//Click on "Delete book"
 
-let arrayRef = 0;
+
+
 /*
 used to set a data-arrayref to the div.book
 goal is to use data-arrayref value to fill the form wih the array values when modifying existing books
@@ -45,6 +58,14 @@ function Book(ISBN, title, author, pagesRead, pagesTotal, read){
     this.pagesRead = pagesRead;
     this.pagesTotal = pagesTotal;
     this.read = read;
+}
+
+//reload bookshelf
+function reloadBookshelf(){
+    arrayRef = 0;
+    const books = document.querySelectorAll('.book')
+    books.forEach(book => {book.remove()})
+    loadExistingBooks();
 }
 
 //load books on load
@@ -75,9 +96,10 @@ function resetForm(){
     document.querySelectorAll('#book-form > input').forEach((element) => element.classList.remove('form-error'));
 }
 
-//click on add book button
+//Click on "add book button"
 addBookPlus.addEventListener('click', () =>{
     bookFormH2.textContent = 'Add book'
+    bookFormSubmit.classList.remove('hidden')
     toggleHiddenBookForm();
     bookFormInputs.forEach(input => {
         input.removeAttribute('readonly')
@@ -88,11 +110,11 @@ addBookPlus.addEventListener('click', () =>{
 
 
 
-//click on individual book element
+//Click on individual book element
 function openBook(event){
     bookFormH2.textContent = 'Edit book'
     toggleHiddenBookForm();
-
+    bookFormSubmit.classList.add('hidden')
     let bookArrayRef = event.target.closest('.book').getAttribute('data-arrayref')    
     addExistingBookValues(bookArrayRef)
     bookFormInputs.forEach(input => {
@@ -102,9 +124,13 @@ function openBook(event){
 }
 
 function addExistingBookValues(bookArrayRef){                       // qe kuyeg iug ierug tlieugrs tglhbctg;jbhfghbcgi;kbcv
-    let bookObject = myLibrary[bookArrayRef]
-    bookFormTitle.value = bookObject.title;
+    bookObject = myLibrary[bookArrayRef]
+    bookFormISBN.value = bookObject.ISBN
+    bookFormTitle.value = bookObject.title
     bookFormAuthor.value = bookObject.author
+    bookFormPagesRead.value = bookObject.pagesRead
+    bookFormPagesTotal.value = bookObject.pagesTotal
+    bookFormRead.value = bookObject.read
 }
 
 
@@ -125,13 +151,21 @@ bookFormSubmit.addEventListener('click', (e) => {
     let z = checkValidity(bookFormPagesTotal)
     let pages = checkIfRead(bookFormPagesRead, bookFormPagesTotal)
     if(!w || !x || !y || !z || !pages) return;
-/*     if(bookFormPagesRead === bookFormPagesTotal){
-        bookFormRead.checked = true;
-        bookFormRead.setAttribute('readonly', 'true')
-    } */
-    addBookToLibrary(bookFormISBN.value, bookFormTitle.value, bookFormAuthor.value, bookFormPagesRead.value, bookFormPagesTotal.value, bookFormRead.checked);
-    addBookToBookshelf(myLibrary[myLibrary.length-1])
-    console.log(myLibrary)
+    if(!modify){
+        addBookToLibrary(bookFormISBN.value, bookFormTitle.value, bookFormAuthor.value, bookFormPagesRead.value, bookFormPagesTotal.value, bookFormRead.checked);
+        addBookToBookshelf(myLibrary[myLibrary.length-1])
+        console.log(myLibrary)
+    }else{
+        bookObject.ISBN = bookFormISBN.value
+        bookObject.title = bookFormTitle.value
+        bookObject.author = bookFormAuthor.value
+        bookObject.pagesRead = bookFormPagesRead.value
+        bookObject.pagesTotal = bookFormPagesTotal.value
+        bookObject.read = bookFormRead.value
+        modify = false
+        console.log(myLibrary)
+        reloadBookshelf();
+    }
     toggleHiddenBookForm();
 })
 
@@ -150,18 +184,21 @@ function checkValidity(element){
 
 //check if pagesTotal < pagesRead
 function checkIfRead(pagesRead, pagesTotal){
+    let isValid;
     if(pagesRead.value > pagesTotal.value){
         pagesRead.classList.remove('form-ok')
         pagesRead.classList.add('form-error')
         pagesTotal.classList.remove('form-ok')
         pagesTotal.classList.add('form-error')
-        return false;
+        isValid = false;
     }else{
         pagesRead.classList.add('form-ok')
         pagesRead.classList.remove('form-error')
         pagesTotal.classList.add('form-ok')
         pagesTotal.classList.remove('form-error')
+        isValid = true;
     }
+    return isValid;
 }
 
 //Add form input to myLibrary array

@@ -44,6 +44,7 @@ header .logo{
 #bookshelf > *{
     height: 250px;
     background-color: #9A6D38;
+    user-select: none;
 }
 
 #add-book-button{
@@ -51,9 +52,10 @@ header .logo{
     justify-content: center;
     align-items: center;
     font-size: 5rem;
+    cursor: pointer;
 }
 #add-book-button span{
-    transition: transform .8s ease-in-out, color .8s ease-in-out;
+    transition: transform .8s ease-in-out, color .3s ease-in-out;
 }
 
 #add-book-button span:hover{
@@ -95,11 +97,14 @@ header .logo{
 
 /* Hidden */
 
-.hidden{
-    display: none;
+input[readonly]{
+    background-color: #ccc;
 }
 
-#newbook-container,
+.hidden{
+    display: none !important;
+}
+
 #book-form-container{
     position: absolute;
     left: 0;
@@ -110,7 +115,6 @@ header .logo{
     backdrop-filter: blur(2px);
 }
 
-#newbook-form-wrapper,
 #book-form-wrapper{
     background-color: #9A6D38;
     padding: var(--padding);
@@ -136,7 +140,19 @@ header .logo{
     position: absolute;
     top: 0;
     right: 0;
-    background-color: tra;
+    cursor: pointer;
+}
+
+#book-form-delete{
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+#book-form-edit:hover,
+#book-form-delete:hover{
+    color: white;
 }
 
 #book-form > input{
@@ -144,20 +160,23 @@ header .logo{
     margin: 0;
 }
 
-#newbook-form *,
 #book-form *{
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-form h2, form img, form input:not(.grid-one-third), form button{
+#book-form-submit{
+    cursor: pointer;
+}
+
+form h2, form img, form input:not(.grid-one-third), #book-form-submit{
     margin: auto;
     text-align: center;
     grid-column: 1 / -1;
 }
 
-input, button{
+input, #book-form-submit{
     height: 35px;
     border: none;
     border-radius: var(--border-radius);
