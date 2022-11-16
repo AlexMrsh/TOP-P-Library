@@ -17,6 +17,7 @@ const bookshelf = document.getElementById('bookshelf');
 
 let myLibrary = [];
 let arrayRef = 0;
+let bookArrayRef;
 let modify = false;
 let bookObject;
 
@@ -37,13 +38,11 @@ bookFormEdit.addEventListener('click', () =>{
 })
 
 //Click on "Delete book"
-
-
-
-/*
-used to set a data-arrayref to the div.book
-goal is to use data-arrayref value to fill the form wih the array values when modifying existing books
-*/
+bookFormDelete.addEventListener('click', () =>{
+    myLibrary.splice(bookArrayRef)
+    toggleHiddenBookForm();
+    reloadBookshelf();
+})
 
 //temp values for test
 addBookToLibrary(123, 'one', 'two', 3, 6, true);
@@ -115,16 +114,15 @@ function openBook(event){
     bookFormH2.textContent = 'Edit book'
     toggleHiddenBookForm();
     bookFormSubmit.classList.add('hidden')
-    let bookArrayRef = event.target.closest('.book').getAttribute('data-arrayref')    
-    addExistingBookValues(bookArrayRef)
+    bookArrayRef = event.target.closest('.book').getAttribute('data-arrayref')
+    bookObject = myLibrary[bookArrayRef]
+    addExistingBookValues()
     bookFormInputs.forEach(input => {
         input.setAttribute('readonly', 'true')
     })
-    // element.target.remove();
 }
 
-function addExistingBookValues(bookArrayRef){                       // qe kuyeg iug ierug tlieugrs tglhbctg;jbhfghbcgi;kbcv
-    bookObject = myLibrary[bookArrayRef]
+function addExistingBookValues(){                       // qe kuyeg iug ierug tlieugrs tglhbctg;jbhfghbcgi;kbcv
     bookFormISBN.value = bookObject.ISBN
     bookFormTitle.value = bookObject.title
     bookFormAuthor.value = bookObject.author
