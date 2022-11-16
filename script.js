@@ -39,7 +39,7 @@ bookFormEdit.addEventListener('click', () =>{
 
 //Click on "Delete book"
 bookFormDelete.addEventListener('click', () =>{
-    myLibrary.splice(bookArrayRef)
+    myLibrary.splice(bookArrayRef, 1)
     toggleHiddenBookForm();
     reloadBookshelf();
 })
