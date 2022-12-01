@@ -21,6 +21,23 @@ let bookArrayRef;
 let modify = false;
 let bookObject;
 
+
+//Book object constructor
+
+class Book{
+    constructor(ISBN, title, author, pagesRead, pagesTotal, read){
+        this.ISBN = ISBN;
+        this.title = title;
+        this.author = author;
+        this.pagesRead = pagesRead;
+        this.pagesTotal = pagesTotal;
+        this.read = read;
+    }
+
+    
+}
+
+
 //Check if pagesTotal > pagesRead
 bookFormPagesTotal.addEventListener('change', () =>{
     bookFormPagesRead.setAttribute('max', bookFormPagesTotal.value)
@@ -49,15 +66,7 @@ addBookToLibrary(123, 'one', 'two', 3, 6, true);
 addBookToLibrary(456, 'five', 'six', 7, 10, false);
 addBookToLibrary(789, 'nine', 'ten', 11, 13, true)
 
-//Book object constructor
-function Book(ISBN, title, author, pagesRead, pagesTotal, read){
-    this.ISBN = ISBN;
-    this.title = title;
-    this.author = author;
-    this.pagesRead = pagesRead;
-    this.pagesTotal = pagesTotal;
-    this.read = read;
-}
+
 
 //reload bookshelf
 function reloadBookshelf(){
@@ -99,6 +108,8 @@ function resetForm(){
 addBookPlus.addEventListener('click', () =>{
     bookFormH2.textContent = 'Add book'
     bookFormSubmit.classList.remove('hidden')
+    bookFormEdit.classList.add('hidden')
+    bookFormDelete.classList.add('hidden')
     toggleHiddenBookForm();
     bookFormInputs.forEach(input => {
         input.removeAttribute('readonly')
@@ -114,6 +125,8 @@ function openBook(event){
     bookFormH2.textContent = 'Edit book'
     toggleHiddenBookForm();
     bookFormSubmit.classList.add('hidden')
+    bookFormEdit.classList.remove('hidden')
+    bookFormDelete.classList.remove('hidden')
     bookArrayRef = event.target.closest('.book').getAttribute('data-arrayref')
     bookObject = myLibrary[bookArrayRef]
     addExistingBookValues()
